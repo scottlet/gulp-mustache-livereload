@@ -1,6 +1,6 @@
 {
   "name": "gulp-mustache-livereload",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "homepage": "https://github.com/scottbert/gulp-mustache-livereload",
   "bugs": "https://github.com/scottbert/gulp-mustache-livereload/issues",
@@ -11,7 +11,10 @@
     "livereload"
   ],
   "browserslist": [
-    "defaults"
+    "> 2%",
+    "last 1 version",
+    "IE 11",
+    "not dead"
   ],
   "license": "MIT",
   "author": "Scott van Looy",
@@ -23,9 +26,9 @@
     "node": "4"
   },
   "dependencies": {
-    "@babel/core": "^7.10.4",
+    "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
-    "autoprefixer": "^9.8.4",
+    "autoprefixer": "^9.8.5",
     "babelify": "^10.0.0",
     "browserify": "^16.5.1",
     "browserify-replace": "^1.0.1",
@@ -34,7 +37,7 @@
     "csswring": "^7.0.0",
     "del": "^5.1.0",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jsdoc": "^29.1.3",
+    "eslint-plugin-jsdoc": "^30.0.3",
     "fancy-log": "^1.3.3",
     "gulp": "^4",
     "gulp-brotli": "^3.0.0",
