@@ -13,9 +13,9 @@ To run the demo, additionally check out https://github.com/scottbert/gulp-mustac
 
 Do ```npm install```
 
-Then ```gulp``` to run the livereload local server ( [http://localhost:9000](http://localhost:9000) )
+Then ```npm run develop``` to run the livereload local server ( [http://localhost:9000](http://localhost:9000) )
 
-```NODE_ENV=production gulp deploy``` to deploy - this puts all of the required files into a 'deploy' directory. You can now put this directory somewhere else and run it.
+```npm run deploy``` to deploy - this puts all of the required files into a 'deploy' directory. You can now put this directory somewhere else and run it.
 
 ### What this gives you
 

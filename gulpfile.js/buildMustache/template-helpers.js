@@ -1,6 +1,5 @@
 const CONSTS = require('../CONSTS');
 
-const handlebars = require('handlebars');
 const nodeNotify = require('node-notifier');
 const i18n2 = require('i18n-2');
 
@@ -49,53 +48,6 @@ function imagePathBuilder(locale) {
         assetPath = 'images/' + assetPath;
 
         return builder(assetPath, data);
-    };
-}
-
-function pathBuilderO(locale) {
-    console.log('locale is', locale);
-    let staticLocale = '';
-
-    if (locale === 'en') {
-        locale = '';
-    } else {
-        locale = '../' + locale + '/';
-        staticLocale = '../';
-    }
-
-    return (assetPath, data, data2, data3) => {
-        const join = '..';
-        const urlparts = [];
-        let newPath = assetPath.replace(/^\//, '');
-
-        const staticasset = /^(pdfs|css|js|images|fonts|video|audio)/.test(newPath);
-        let myPath = data.data.file.relative;
-
-        if (staticasset) {
-            myPath = locale + myPath;
-        }
-
-        myPath.split('/').forEach((part, idx) => {
-            if (idx && !staticasset) {
-                //        console.log('EHAT', idx);
-                urlparts.push(join);
-            }
-        });
-
-        if (staticasset) {
-            urlparts.push(CONSTS.VERSION);
-        }
-
-        if (staticasset) {
-            newPath = staticLocale + CONSTS.VERSION + '/' + newPath;
-        } else {
-            newPath = (urlparts.length ? urlparts.join('/') + '/' : '') + newPath;
-        }
-
-        // console.log('filePath', data.data.file.relative);
-        // console.log('orig assetpath', assetPath, 'new assetpath', newPath);
-
-        return newPath || '/';
     };
 }
 
