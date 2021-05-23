@@ -7,7 +7,7 @@ const gulpIf = require('gulp-if');
 const gulpLivereload = require('gulp-livereload');
 const gulpPlumber = require('gulp-plumber');
 const gulpPostcss = require('gulp-postcss');
-const gulpSass = require('gulp-sass');
+const gulpSass = require('gulp-dart-sass');
 const gulpSassVariables = require('gulp-sass-variables');
 const postcssAssets = require('postcss-assets');
 const postcssNormalize = require('postcss-normalize');
@@ -27,8 +27,6 @@ const sassOptions = {
 const gulpOptions = isDev ? {
     sourcemaps: true
 } : {};
-
-gulpSass.compiler = require('node-sass');
 
 function buildSassVariables(breakpoints) {
     let b;
