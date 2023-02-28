@@ -1,21 +1,35 @@
-const browserify = require('browserify');
-const CONSTS = require('./CONSTS');
-const fancyLog = require('fancy-log');
-const glob = require('glob');
-const { dest } = require('gulp');
-const gulpIf = require('gulp-if');
-const gulpLivereload = require('gulp-livereload');
-const { onError } = require('gulp-notify');
-const gulpPlumber = require('gulp-plumber');
-const gulpReplace = require('gulp-replace');
-const merge2 = require('merge2');
-const vinylBuffer = require('vinyl-buffer');
-const vinylSourceStream = require('vinyl-source-stream');
-const watchify = require('watchify');
+import browserify from 'browserify';
+import { CONSTS } from './CONSTS';
+import fancyLog from 'fancy-log';
+import glob from 'glob';
+import { dest } from 'gulp';
+import gulpIf from 'gulp-if';
+import gulpLivereload from 'gulp-livereload';
+import { notify } from './notify';
+import gulpPlumber from 'gulp-plumber';
+import gulpReplace from 'gulp-replace';
+import merge2 from 'merge2';
+import vinylBuffer from 'vinyl-buffer';
+import vinylSourceStream from 'vinyl-source-stream';
+import watchify from 'watchify';
 
-const isDev = CONSTS.NODE_ENV !== 'production';
+const {
+    API,
+    BREAKPOINTS,
+    JS_DEST,
+    LANGS,
+    COMPONENTS_SRC,
+    JS_OUTPUT,
+    JS_SRC,
+    LIVERELOAD_PORT,
+    NAME,
+    NODE_ENV,
+    VERSION
+} = CONSTS;
 
-const entries = glob.sync(CONSTS.JS_SRC + '*.js');
+const isDev = NODE_ENV !== 'production';
+
+const entries = glob.sync(JS_SRC + '*.js');
 
 function addToBrowserify(locale) {
     let localeStr = locale.replace('en', '');
@@ -31,8 +45,8 @@ function addToBrowserify(locale) {
             debug: !!isDev,
             packageCache: {},
             paths: [
-                `./${CONSTS.JS_SRC}modules`,
-                `./${CONSTS.COMPONENTS_SRC}`,
+                `./${JS_SRC}modules`,
+                `./${COMPONENTS_SRC}`,
                 './.tmp/'
             ],
             transform: [
@@ -44,7 +58,10 @@ function addToBrowserify(locale) {
             ]
         };
 
-        const name = entry.replace('-$lang', '-' + locale).replace('$name', CONSTS.NAME)
+        const name = entry
+            .replace('-$lang', '-' + locale)
+            .replace('$name', NAME.replace(/ /gi, '-').toLowerCase())
+            .replace('$version', VERSION)
             .replace(/.*\/([\w$\-.]+).js/, '$1');
 
         const b = browserify(options);
@@ -76,19 +93,19 @@ function addToBrowserify(locale) {
 
             return b
                 .bundle()
-                .pipe(gulpPlumber({ errorHandler: onError('Bundle Error: <%= error.message %>') }))
-                .pipe(vinylSourceStream(name + CONSTS.JS_OUTPUT))
+                .pipe(gulpPlumber({ errorHandler: notify('Bundle Error: <%= error.message %>') }))
+                .pipe(vinylSourceStream(name + JS_OUTPUT))
                 .pipe(vinylBuffer())
-                .pipe(gulpReplace('$$version$$', CONSTS.VERSION))
-                .pipe(gulpReplace('$$API$$', CONSTS.API))
-                .pipe(gulpReplace('$$oldMobile$$', CONSTS.BREAKPOINTS.OLD_MOBILE))
-                .pipe(gulpReplace('$$mobile$$', CONSTS.BREAKPOINTS.MOBILE))
-                .pipe(gulpReplace('$$smalltablet$$', CONSTS.BREAKPOINTS.SMALL_TABLET))
-                .pipe(gulpReplace('$$tablet$$', CONSTS.BREAKPOINTS.TABLET))
-                .pipe(gulpReplace('$$smalldesktop$$', CONSTS.BREAKPOINTS.SMALL_DESKTOP))
-                .pipe(dest(CONSTS.JS_DEST))
+                .pipe(gulpReplace('$$version$$', VERSION))
+                .pipe(gulpReplace('$$API$$', API))
+                .pipe(gulpReplace('$$oldMobile$$', BREAKPOINTS.OLD_MOBILE))
+                .pipe(gulpReplace('$$mobile$$', BREAKPOINTS.MOBILE))
+                .pipe(gulpReplace('$$smalltablet$$', BREAKPOINTS.SMALL_TABLET))
+                .pipe(gulpReplace('$$tablet$$', BREAKPOINTS.TABLET))
+                .pipe(gulpReplace('$$smalldesktop$$', BREAKPOINTS.SMALL_DESKTOP))
+                .pipe(dest(JS_DEST))
                 .pipe(gulpIf(doLR(), gulpLivereload({
-                    port: CONSTS.LIVERELOAD_PORT
+                    port: LIVERELOAD_PORT
                 })));
         }
 
@@ -103,7 +120,7 @@ function addToBrowserify(locale) {
 function createJSBundles() {
     let tasks = [];
 
-    CONSTS.LANGS.forEach(locale => {
+    LANGS.forEach(locale => {
         tasks = tasks.concat(entries.map(addToBrowserify(locale)));
     });
 
@@ -111,4 +128,4 @@ function createJSBundles() {
 }
 
 
-module.exports = createJSBundles;
+export { createJSBundles as browserify };

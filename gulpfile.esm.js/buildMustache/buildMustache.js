@@ -1,17 +1,17 @@
-const mustache = require('gulp-mustache');
-const merge2 = require('merge2');
-const gulpPlumber = require('gulp-plumber');
-const { errorHandler, getStem, setErrorShown, getDynamicHelpers, getStaticHelpers } = require('./template-helpers');
-const gulpLivereload = require('gulp-livereload');
-const through2 = require('through2');
-const { src, dest } = require('gulp');
-const CONSTS = require('../CONSTS');
+import { src, dest } from 'gulp';
+import mustache from 'gulp-mustache';
+import merge2 from 'merge2';
+import gulpPlumber from 'gulp-plumber';
+import { errorHandler, getStem, setErrorShown, getDynamicHelpers, getStaticHelpers } from './template-helpers';
+import gulpLivereload from 'gulp-livereload';
+import through2 from 'through2';
+import { CONSTS } from '../CONSTS';
 
 // gulp.src('./templates/*.mustache')
 //     .pipe(mustache())
 //     .pipe(gulp.dest('./dist'));
 
-function buildFiles(file, enc, callback) {
+function buildFiles(file, _enc, callback) {
     const locale = getStem(file.path);
     const finalPath = 'dist' + (locale === 'en' ? '' : '/' + locale);
     const dynamicHelpers = getDynamicHelpers(locale);
@@ -45,4 +45,4 @@ function buildMustache() {
         .pipe(through2.obj(buildFiles));
 }
 
-module.exports = buildMustache;
+export { buildMustache };

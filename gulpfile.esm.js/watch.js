@@ -1,13 +1,14 @@
-const fancyLog = require('fancy-log');
-const buildMustache = require('./buildMustache');
-const doc = require('./doc');
-const eslint = require('./eslint');
-const sass = require('./sass');
-const { copyStaticFiles } = require('./copy');
-const { mochaTestLR } = require('./mochaTest');
-const { parallel, watch } = require('gulp');
-const gulpLivereload = require('gulp-livereload');
-const CONSTS = require('./CONSTS');
+import fancyLog from 'fancy-log';
+import { buildMustache } from './buildMustache';
+import { doc } from './doc';
+import { eslint } from './eslint';
+import { sass } from './sass';
+import { copyStaticFiles } from './copy';
+import { mochaTestLR } from './mochaTest';
+import { parallel, watch } from 'gulp';
+import gulpLivereload from 'gulp-livereload';
+import { CONSTS } from './CONSTS';
+
 const PUBLIC = [CONSTS.IMG_SRC + '/**/!(*.svg)', CONSTS.FONT_SRC + '/**/*', CONSTS.JSON_SRC + '/**/*'];
 const SASS = [CONSTS.CSS_SRC_PATH + '/**/*', CONSTS.IMG_SRC + '/**/*.svg'];
 const DATA = [CONSTS.DATA_SRC + '/**/*.json', CONSTS.I18N + '/**/*.json'];
@@ -50,4 +51,4 @@ function startWatch(cb) {
     cb();
 }
 
-module.exports = startWatch;
+export { startWatch as watch };

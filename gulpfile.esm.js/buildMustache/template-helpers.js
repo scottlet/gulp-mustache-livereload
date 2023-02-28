@@ -1,7 +1,8 @@
-const CONSTS = require('../CONSTS');
+import nodeNotify from 'node-notifier';
+import { CONSTS } from '../CONSTS';
+import i18n2 from 'i18n-2';
 
-const nodeNotify = require('node-notifier');
-const i18n2 = require('i18n-2');
+const { LANGS, HOST, PATH, NODE_ENV, NAME, VERSION } = CONSTS;
 
 const staticHelpers = {
     uc: str => {
@@ -28,15 +29,17 @@ const staticHelpers = {
         };
     },
     hostname() {
-        return CONSTS.HOST;
+        return HOST;
     },
     hostpath() {
-        return CONSTS.PATH;
+        return PATH;
     },
     production() {
-        return CONSTS.NODE_ENV === 'production';
+        return NODE_ENV === 'production';
     },
-    version: CONSTS.VERSION
+    name: NAME.replace(/ /gi, '-').toLowerCase(),
+    version: VERSION,
+    datestamp: () => Date.now()
 };
 
 let errorShown;
@@ -55,10 +58,10 @@ function pathBuilder(locale) {
     return () => {
         return function (text, render) {
             if (text.charAt(0) !== '/') {
-                return '/' + CONSTS.VERSION + '/' + render(text);
+                return '/' + VERSION + '/' + render(text);
             }
 
-            return '/' + CONSTS.VERSION + render(text);
+            return '/' + VERSION + render(text);
         };
     };
 }
@@ -95,7 +98,7 @@ function getStaticHelpers() {
 
 function getDynamicHelpers(locale) {
     const i18n = new i18n2({
-        locales: CONSTS.LANGS,
+        locales: LANGS,
         defaultLocale: 'en',
         extension: '.json',
         directory: './src/i18n',
@@ -155,7 +158,7 @@ function getDynamicHelpers(locale) {
     return rets;
 }
 
-module.exports = {
+export {
     getStaticHelpers,
     errorHandler,
     renameFile,

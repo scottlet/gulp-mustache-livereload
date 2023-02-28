@@ -28,7 +28,7 @@ const CONSTS = Object.assign({
     FONT_SRC: 'src/fonts',
     GULP_PORT: process.env.GULP_PORT || DEFAULT_PORT,
     GULP_TASKS: 'gulp-tasks',
-    GULPFILE: 'gulpfile.js',
+    GULPFILE: 'gulpfile.esm.js',
     I18N: 'src/i18n',
     IMG_SRC: 'src/images',
     JS_DEST: `${STATIC_ASSETS}/js`,
@@ -48,4 +48,4 @@ const CONSTS = Object.assign({
     VIDEO_SRC: 'src/video'
 }, OPTIONS);
 
-module.exports = CONSTS;
+export { CONSTS };
