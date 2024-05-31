@@ -9,7 +9,7 @@ If you have homebrew installed on OSX this is as simple as `brew install node`.
 
 If you don't have homebrew on OSX, visit http://brew.sh
 
-To run the demo, additionally check out https://github.com/scottbert/gulp-mustache-livereload-src-example then copy into the root of this folder as "src" (This is now included by default as a git submodule)
+To run the demo, additionally check out https://github.com/scottlet/gulp-mustache-livereload-src-example then copy into the root of this folder as "src" (This is now included by default as a git submodule)
 
 Do ```npm install```
 

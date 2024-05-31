@@ -2,8 +2,8 @@
   "name": "gulp-mustache-livereload",
   "version": "2.0.0",
   "private": false,
-  "homepage": "https://github.com/scottbert/gulp-mustache-livereload",
-  "bugs": "https://github.com/scottbert/gulp-mustache-livereload/issues",
+  "homepage": "https://github.com/scottlet/gulp-mustache-livereload",
+  "bugs": "https://github.com/scottlet/gulp-mustache-livereload/issues",
   "description": "build static sites using gulp and mustache",
   "keywords": [
     "gulp",
@@ -21,7 +21,7 @@
   "contributors": [
     "Scott van Looy"
   ],
-  "repository": "https://github.com/scottbert/gulp-mustache-livereload.git",
+  "repository": "https://github.com/scottlet/gulp-mustache-livereload.git",
   "engines": {
     "node": ">=10"
   },
