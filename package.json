@@ -33,7 +33,7 @@
     "develop": "NODE_ENV=development gulp",
     "dev": "NODE_ENV=development gulp",
     "sass": "NODE_ENV=production gulp sass",
-    "lint": "eslint './src/**/*.{js,jsx}'",
+    "lint": "eslint './**/*.{js,jsx}'",
     "lint:type-check": "tsc --project jsconfig.json --noEmit  --maxNodeModuleJsDepth 0",
     "validate": "npm run lint && npm run lint:type-check",
     "test": "gulp mochaTest"
