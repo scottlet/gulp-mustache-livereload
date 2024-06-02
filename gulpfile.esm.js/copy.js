@@ -11,32 +11,66 @@ import gulpPlumber from 'gulp-plumber';
 import gulpLivereload from 'gulp-livereload';
 import { CONSTS } from './CONSTS';
 
-const STATIC_SRC = [CONSTS.JSON_SRC + '/**', CONSTS.IMG_SRC + '/**', CONSTS.FONT_SRC + '/**', CONSTS.VIDEO_SRC + '/**'];
+const {
+  JSON_SRC,
+  FONT_SRC,
+  IMG_SRC,
+  LIVERELOAD_PORT,
+  SRC,
+  STATIC_PATH,
+  VIDEO_SRC,
+  DIST_DEST,
+  DEPLOY_DEST
+} = CONSTS;
 
+const STATIC_SRC = [
+  JSON_SRC + '/**',
+  IMG_SRC + '/**',
+  FONT_SRC + '/**',
+  VIDEO_SRC + '/**'
+];
+
+/**
+ * Copies static files from the source directory to the destination directory.
+ * @returns {NodeJS.ReadWriteStream} A promise that resolves when the copying is complete.
+ */
 function copyStaticFiles() {
-    return copyFilesFn(STATIC_SRC, CONSTS.STATIC_PATH, CONSTS.SRC, true);
+  return copyFilesFn(STATIC_SRC, STATIC_PATH, SRC, true);
 }
 
+/**
+ * Copies files from the source directory to the destination directory.
+ * @param {string|Array<string>} srcdir - The source directory or directories to copy files from.
+ * @param {string} destdir - The destination directory to copy files to.
+ * @param {string} [base] - The base directory for resolving relative paths.
+ * @param {boolean} [reload] - Whether to reload the files using gulp-livereload.
+ * @returns {NodeJS.ReadWriteStream} A promise that resolves when the copying is complete.
+ */
 function copyFilesFn(srcdir, destdir, base, reload) {
-    return src(srcdir, { base: base || '.' })
-        .pipe(
-            gulpPlumber({
-                errorHandler: notify('copy error: <%= error.message %>')
-            })
-        )
-        .pipe(gulpChanged(destdir))
-        .pipe(dest(destdir))
-        .pipe(gulpIf(reload, gulpLivereload({
-            port: CONSTS.LIVERELOAD_PORT
-        })));
+  return src(srcdir, { base: base || '.' })
+    .pipe(
+      gulpPlumber({
+        errorHandler: notify('copy error: <%= error.message %>')
+      })
+    )
+    .pipe(gulpChanged(destdir))
+    .pipe(dest(destdir))
+    .pipe(
+      gulpIf(
+        reload,
+        gulpLivereload({
+          port: LIVERELOAD_PORT
+        })
+      )
+    );
 }
 
+/**
+ * Copies the contents of the `DIST_DEST` directory to the `DEPLOY_DEST` directory.
+ * @returns {NodeJS.ReadWriteStream} A stream that represents the copying operation.
+ */
 function copyDeploy() {
-    return src([CONSTS.DIST_DEST + '/**/*'], { base: 'dist' })
-        .pipe(dest(CONSTS.DEPLOY_DEST));
+  return src([DIST_DEST + '/**/*'], { base: 'dist' }).pipe(dest(DEPLOY_DEST));
 }
 
-export {
-    copyStaticFiles,
-    copyDeploy
-};
+export { copyStaticFiles, copyDeploy };
