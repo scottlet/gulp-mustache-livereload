@@ -44,5 +44,6 @@ export {
   handlebars,
   mochaTest,
   sass,
-  server
+  server,
+  watch
 };

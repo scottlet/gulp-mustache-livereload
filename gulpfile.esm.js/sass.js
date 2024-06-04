@@ -59,7 +59,7 @@ const sassVariables = buildSassVariables(BREAKPOINTS);
 /**
  * Renames the basename of a given path by replacing placeholders with the values of `NAME` and `VERSION`,
  * and appends `.min` to the end of the basename.
- * @param {object} path - The path object to be renamed.
+ * @param {{basename: string}} path - The path object to be renamed.
  * @returns {void} This function does not return a value.
  */
 function rename(path) {

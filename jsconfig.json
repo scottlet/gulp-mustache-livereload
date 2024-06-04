@@ -8,7 +8,7 @@
     "skipLibCheck": true,
     "jsx": "preserve",
     "paths": {
-      "~/*": ["./src/js/modules/*"]
+      "~/*": ["./src/js/modules/*", "./js/modules/*"]
     },
     "types": ["node", "mocha", "undertaker"]
   },

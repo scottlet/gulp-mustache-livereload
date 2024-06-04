@@ -146,7 +146,11 @@ function addToBrowserify(locale) {
 
     b.on('update', bundle);
     b.on('log', fancyLog);
-    b.on('error', fancyLog);
+    b.on('error', (/** @type {any} */ err) => {
+      notify('Browserify error')(err);
+      // @ts-ignore
+      this.emit('end');
+    });
 
     return bundle();
   };

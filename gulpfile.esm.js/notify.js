@@ -11,7 +11,7 @@ function short(a) {
   if ((a || '').includes('/')) {
     const arr = a.split('/');
 
-    return arr.pop();
+    return arr.pop() || a;
   }
 
   return a;

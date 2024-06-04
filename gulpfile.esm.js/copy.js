@@ -46,8 +46,8 @@ function copyStaticFiles() {
  * @param {boolean} [reload] - Whether to reload the files using gulp-livereload.
  * @returns {NodeJS.ReadWriteStream} A promise that resolves when the copying is complete.
  */
-function copyFilesFn(srcdir, destdir, base, reload) {
-  return src(srcdir, { base: base || '.' })
+function copyFilesFn(srcdir, destdir, base = '.', reload) {
+  return src(srcdir, { base })
     .pipe(
       gulpPlumber({
         errorHandler: notify('copy error: <%= error.message %>')

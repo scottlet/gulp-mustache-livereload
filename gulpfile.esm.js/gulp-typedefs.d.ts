@@ -3,6 +3,7 @@ declare module 'gulp-changed-in-place';
 declare module 'common-shakeify';
 declare module 'gulp-eslint';
 declare module 'gulp-wait';
+declare module 'postcss-assets';
 declare module 'postcss-combine-media-query';
 declare module 'postcss-sort-media-queries';
 declare module 'gulp-spawn-mocha';

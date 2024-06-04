@@ -9,15 +9,27 @@ import { parallel, watch } from 'gulp';
 import gulpLivereload from 'gulp-livereload';
 import { CONSTS } from './CONSTS';
 
+const {
+  IMG_SRC,
+  FONT_SRC,
+  JSON_SRC,
+  CSS_SRC_PATH,
+  DATA_SRC,
+  I18N,
+  TEMPLATES_SRC,
+  LIVERELOAD_PORT
+} = CONSTS;
+
 const PUBLIC = [
-  CONSTS.IMG_SRC + '/**/!(*.svg)',
-  CONSTS.FONT_SRC + '/**/*',
-  CONSTS.JSON_SRC + '/**/*'
+  IMG_SRC + '/**/!(*.svg)',
+  FONT_SRC + '/**/*',
+  JSON_SRC + '/**/*'
 ];
-const SASS = [CONSTS.CSS_SRC_PATH + '/**/*', CONSTS.IMG_SRC + '/**/*.svg'];
-const DATA = [CONSTS.DATA_SRC + '/**/*.json', CONSTS.I18N + '/**/*.json'];
+const SASS = [CSS_SRC_PATH + '/**/*', IMG_SRC + '/**/*.svg'];
+const DATA = [DATA_SRC + '/**/*.json', I18N + '/**/*.json'];
 const JS = ['src/**/*.js'];
-const TEMPLATES = [CONSTS.TEMPLATES_SRC + '**/*.mustache'];
+const TEMPLATES = [TEMPLATES_SRC + '**/*.mustache'];
+const TESTS = '**/*.js';
 
 /**
  * Watches for changes in various directories and triggers corresponding tasks.
@@ -26,27 +38,27 @@ const TEMPLATES = [CONSTS.TEMPLATES_SRC + '**/*.mustache'];
  */
 function watchers(cb) {
   gulpLivereload.listen({
-    port: CONSTS.LIVERELOAD_PORT
+    port: LIVERELOAD_PORT
   });
   const watchPublic = watch(PUBLIC, copyStaticFiles);
   const watchSass = watch(SASS, sass);
   const watchTemplates = watch(TEMPLATES, buildMustache);
   const watchData = watch(DATA, buildMustache);
-  const watchTests = watch(CONSTS.JS_SRC + '**/*-test.js', mochaTestLR);
+  const watchTests = watch(TESTS, mochaTestLR);
   const watchDocs = watch(JS, parallel(doc, eslint));
   const watchPackages = watch('./package.json', buildMustache);
 
   [
-    watchPublic,
-    watchSass,
-    watchData,
-    watchDocs,
-    watchTemplates,
-    watchTests,
-    watchPackages
+    { label: 'watchPublic', watcher: watchPublic },
+    { label: 'watchSass', watcher: watchSass },
+    { label: 'watchData', watcher: watchData },
+    { label: 'watchDocs', watcher: watchDocs },
+    { label: 'watchTemplates', watcher: watchTemplates },
+    { label: 'watchTests', watcher: watchTests },
+    { label: 'watchPackages', watcher: watchPackages }
   ].forEach(w => {
-    w.on('change', function (path) {
-      fancyLog(`file ${path} was changed. Triggered by ${this.name} watcher.`);
+    w.watcher.on('change', path => {
+      fancyLog(`file ${path} was changed. Triggered by ${w.label} watcher.`);
     });
   });
   cb();

@@ -1,17 +1,14 @@
 module.exports = {
   env: {
     node: true,
-    es6: true
+    mocha: true,
+    es6: true,
+    browser: true
   },
   plugins: ['import', 'jsdoc', 'prettier'],
   settings: {
     'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx']
-      },
-      alias: {
-        map: [['~', './src/js/modules/']]
-      }
+      alias: [['~', './src/js/modules']]
     }
   },
   extends: [
