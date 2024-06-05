@@ -56,7 +56,6 @@ function addToBrowserify(locale) {
 
   return function (entry) {
     const options = {
-      builtins: {},
       entries: [entry],
       cache: {},
       debug: !!isDev,

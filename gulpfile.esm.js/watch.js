@@ -4,7 +4,7 @@ import { doc } from './doc';
 import { eslint } from './eslint';
 import { sass } from './sass';
 import { copyStaticFiles } from './copy';
-import { mochaTestLR } from './mochaTest';
+import { mochaTest, mochaTestSrc } from './mochaTest';
 import { parallel, watch } from 'gulp';
 import gulpLivereload from 'gulp-livereload';
 import { CONSTS } from './CONSTS';
@@ -44,7 +44,7 @@ function watchers(cb) {
   const watchSass = watch(SASS, sass);
   const watchTemplates = watch(TEMPLATES, buildMustache);
   const watchData = watch(DATA, buildMustache);
-  const watchTests = watch(TESTS, mochaTestLR);
+  const watchTests = watch(TESTS, mochaTest);
   const watchDocs = watch(JS, parallel(doc, eslint));
   const watchPackages = watch('./package.json', buildMustache);
 
@@ -64,4 +64,21 @@ function watchers(cb) {
   cb();
 }
 
-export { watchers as watch };
+/**
+ * Watches for changes in test files and triggers the mocha test task.
+ * @param {Function} cb - The callback function to be called
+ * @returns {void}
+ */
+function testWatcher(cb) {
+  const watchTestsSrc = watch('**/*.js', mochaTestSrc);
+
+  [{ label: 'Watch src tests', watcher: watchTestsSrc }].forEach(w => {
+    w.watcher.on('change', path => {
+      fancyLog(`file ${path} was changed. Triggered by ${w.label} watcher.`);
+    });
+  });
+  mochaTestSrc();
+  cb();
+}
+
+export { watchers as watch, testWatcher };

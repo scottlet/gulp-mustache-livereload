@@ -1,38 +1,35 @@
 import { src } from 'gulp';
 import { notify } from './notify';
 import gulpPlumber from 'gulp-plumber';
-import gulpSpawnMocha from 'gulp-spawn-mocha';
-import gulpWait from 'gulp-wait';
+import gulpMocha from 'gulp-mocha';
 import { CONSTS } from './CONSTS';
 
 const { SRC, GULPFILE } = CONSTS;
 
-const TEST_DELAY = 1;
-
 const mochaOptions = {
   require: ['esm'],
-  R: 'spec'
+  reporter: 'spec'
 };
 
 if (process.env.NODE_ENV === 'production') {
-  mochaOptions.R = 'nyan';
+  mochaOptions.reporter = 'nyan';
 }
 
-const TESTS_SRC = [`${SRC}/**/*.test.js`, `${GULPFILE}/**/*.test.js`];
+const TESTS_SRC = `${SRC}/**/*.test.js`;
+const ALL_TESTS_SRC = [TESTS_SRC, `${GULPFILE}/**/*.test.js`];
 
 /**
  * Runs the Mocha test suite with live reloading.
  * @returns {NodeJS.ReadWriteStream} The stream of the Mocha test suite.
  */
-function mochaTestLR() {
+function mochaTestSrc() {
   return src(TESTS_SRC, { read: false })
-    .pipe(gulpWait(TEST_DELAY))
     .pipe(
       gulpPlumber({
         errorHandler: notify('gulpMocha Error: <%= error.message %>')
       })
     )
-    .pipe(gulpSpawnMocha(mochaOptions));
+    .pipe(gulpMocha(mochaOptions));
 }
 
 /**
@@ -40,13 +37,13 @@ function mochaTestLR() {
  * @returns {NodeJS.ReadWriteStream} The stream of the Mocha test suite.
  */
 function mochaTest() {
-  return src(TESTS_SRC, { read: false })
+  return src(ALL_TESTS_SRC, { read: false })
     .pipe(
       gulpPlumber({
         errorHandler: notify('gulpMocha Error: <%= error.message %>')
       })
     )
-    .pipe(gulpSpawnMocha(mochaOptions));
+    .pipe(gulpMocha(mochaOptions));
 }
 
-export { mochaTest, mochaTestLR };
+export { mochaTest, mochaTestSrc };
